@@ -4,7 +4,7 @@ Este proyecto permite gestionar clientes y sus electrodomésticos en un sistema 
 
 ## Requisitos
 - Servidor local: XAMPP, WAMP o similar.
-- Base de datos MySQL (adjunta en el archivo comprimido).
+- Base de datos MySQL (adjunta en el archivo de la descarga).
 - Navegador web.
 
 ## Instalación
