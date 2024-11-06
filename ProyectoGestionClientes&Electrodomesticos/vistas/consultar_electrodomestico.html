@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Electrodoméstico</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <header>
+        <h1>Consultar Electrodoméstico</h1>
+    </header>
+    <nav>
+        <a href="electrodomesticos.html">Volver a Gestión de Electrodomésticos</a>
+    </nav>
+    <section>
+        <!-- Formulario para buscar el electrodoméstico por ID de cliente -->
+        <form id="formularioBuscarElectrodomestico" action="../api/buscar_electrodomestico.php" method="POST">
+            <label for="id_cliente_busqueda">ID designada:</label>
+            <input type="text" id="id_cliente_busqueda" name="id_cliente_busqueda" required>
+            <button type="submit">Buscar Electrodoméstico</button>
+        </form>
+
+        <!-- Sección para mostrar los datos del electrodoméstico -->
+        <div id="datosElectrodomestico" style="display:none;">
+            <h2>Datos del Electrodoméstico</h2>
+            <p><strong>Tipo:</strong> <span id="tipo"></span></p>
+            <p><strong>Modelo:</strong> <span id="modelo"></span></p>
+            <p><strong>Cantidad:</strong> <span id="cantidad"></span></p>
+            <p><strong>Problema:</strong> <span id="problema"></span></p>
+            <p><strong>Tipo de Reparación:</strong> <span id="tipo_reparacion"></span></p>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('formularioBuscarElectrodomestico').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idClienteBusqueda = document.getElementById('id_cliente_busqueda').value;
+
+            fetch('../api/buscar_electrodomestico.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id_cliente_busqueda=${idClienteBusqueda}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    document.getElementById('datosElectrodomestico').style.display = 'none';
+                } else {
+                    document.getElementById('datosElectrodomestico').style.display = 'block';
+                    document.getElementById('tipo').textContent = data.tipo;
+                    document.getElementById('modelo').textContent = data.modelo;
+                    document.getElementById('cantidad').textContent = data.cantidad;
+                    document.getElementById('problema').textContent = data.problema;
+                    document.getElementById('tipo_reparacion').textContent = data.tipo_reparacion;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

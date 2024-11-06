@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Electrodoméstico</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script src="../controlador/validaciones.js" defer></script>
+
+</head>
+<body>
+    <header>
+        <h1>Eliminar Electrodoméstico</h1>
+    </header>
+    <nav>
+        <a href="electrodomesticos.html">Volver a Gestión de Electrodomésticos</a>
+    </nav>
+    <section>
+        <!-- Formulario para buscar el electrodoméstico por ID de cliente -->
+        <form id="formularioBuscarElectrodomestico" action="../api/buscar_electrodomestico.php" method="POST">
+            <label for="id_cliente_busqueda">ID designada:</label>
+            <input type="text" id="id_cliente_busqueda" name="id_cliente_busqueda" required>
+            <button type="submit">Buscar y dar de baja Electrodoméstico</button>
+        </form>
+
+        <!-- Sección para confirmar eliminación del electrodoméstico -->
+        <div id="confirmacionEliminacion" style="display:none;">
+            <p>¿Está seguro de que desea eliminar este electrodoméstico?</p>
+            <form id="formularioEliminarElectrodomestico" action="../api/procesar_baja_electrodomestico.php" method="POST">
+                <input type="hidden" id="id_electrodomestico" name="id_electrodomestico">
+                <p><strong>Tipo:</strong> <span id="tipo"></span></p>
+                <p><strong>Modelo:</strong> <span id="modelo"></span></p>
+                <p><strong>Cantidad:</strong> <span id="cantidad"></span></p>
+                <p><strong>Problema:</strong> <span id="problema"></span></p>
+                <p><strong>Tipo de Reparación:</strong> <span id="tipo_reparacion"></span></p>
+                <button type="submit">Confirmar Eliminación</button>
+                <button type="button" onclick="window.location.href='electrodomesticos.html'">Cancelar</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('formularioBuscarElectrodomestico').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idClienteBusqueda = document.getElementById('id_cliente_busqueda').value;
+
+            fetch('../api/buscar_electrodomestico.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id_cliente_busqueda=${idClienteBusqueda}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('confirmacionEliminacion').style.display = 'block';
+                    document.getElementById('id_electrodomestico').value = data.id;
+                    document.getElementById('tipo').textContent = data.tipo;
+                    document.getElementById('modelo').textContent = data.modelo;
+                    document.getElementById('cantidad').textContent = data.cantidad;
+                    document.getElementById('problema').textContent = data.problema;
+                    document.getElementById('tipo_reparacion').textContent = data.tipo_reparacion;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

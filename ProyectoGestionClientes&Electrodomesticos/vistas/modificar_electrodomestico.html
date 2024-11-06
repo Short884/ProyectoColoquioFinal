@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Electrodoméstico</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <header>
+        <h1>Modificar Electrodoméstico</h1>
+    </header>
+    <nav>
+        <a href="electrodomesticos.html">Volver a Gestión de Electrodomésticos</a>
+    </nav>
+    <section>
+        <!-- Formulario para buscar el electrodoméstico por ID de cliente -->
+        <form id="formularioBuscarElectrodomestico" action="../api/buscar_electrodomestico.php" method="POST">
+            <label for="id_cliente_busqueda">ID designada:</label>
+            <input type="text" id="id_cliente_busqueda" name="id_cliente_busqueda" required>
+            <button type="submit">Buscar Electrodoméstico</button>
+        </form>
+
+        <!-- Formulario para modificar el electrodoméstico -->
+        <form id="formularioModificarElectrodomestico" action="../api/procesar_modificacion_electrodomestico.php" method="POST" style="display:none;">
+            <input type="hidden" id="id_electrodomestico" name="id_electrodomestico">
+
+            <label for="tipo">Tipo de Electrodoméstico:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="lavarropas">Lavarropas</option>
+                <option value="heladera">Heladera</option>
+            </select>
+
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" name="modelo" required>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" required min="1">
+
+            <label for="problema">Problema:</label>
+            <textarea id="problema" name="problema" required></textarea>
+
+            <label for="tipo_reparacion">Tipo de Reparación:</label>
+            <select id="tipo_reparacion" name="tipo_reparacion" required>
+                <option value="tecnica">Técnica</option>
+                <option value="mecanica">Mecánica</option>
+            </select>
+
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" onclick="window.location.href='../vistas/electrodomesticos.html'">Cancelar</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('formularioBuscarElectrodomestico').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const idClienteBusqueda = document.getElementById('id_cliente_busqueda').value;
+
+            fetch('../api/buscar_electrodomestico.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id_cliente_busqueda=${idClienteBusqueda}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('formularioModificarElectrodomestico').style.display = 'block';
+                    document.getElementById('id_electrodomestico').value = data.id;
+                    document.getElementById('tipo').value = data.tipo;
+                    document.getElementById('modelo').value = data.modelo;
+                    document.getElementById('cantidad').value = data.cantidad;
+                    document.getElementById('problema').value = data.problema;
+                    document.getElementById('tipo_reparacion').value = data.tipo_reparacion;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

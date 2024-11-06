@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta de Electrodoméstico</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script src="../controlador/validaciones.js" defer></script>
+
+</head>
+<body>
+    <header>
+        <h1>Agregar Electrodoméstico</h1>
+    </header>
+    <nav>
+        <a href="electrodomesticos.html">Volver a Gestión de Electrodomésticos</a>
+    </nav>
+    <section>
+        <form id="formularioAltaElectrodomestico" action="../api/procesar_alta_electrodomestico.php" method="POST">
+            <label for="id_cliente">ID propia designada:</label>
+            <input type="text" id="id_cliente" name="id_cliente" required>
+
+            <label for="tipo">Tipo de Electrodoméstico:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="lavarropas">Lavarropas</option>
+                <option value="heladera">Heladera</option>
+            </select>
+
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" name="modelo" required>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" required min="1">
+
+            <label for="problema">Problema:</label>
+            <textarea id="problema" name="problema" required></textarea>
+
+            <label for="tipo_reparacion">Tipo de Reparación:</label>
+            <select id="tipo_reparacion" name="tipo_reparacion" required>
+                <option value="tecnica">Técnica</option>
+                <option value="mecanica">Mecánica</option>
+            </select>
+
+            <button type="submit">Agregar Electrodoméstico</button>
+            <button type="button" onclick="window.location.href='../vistas/electrodomesticos.html'">Cancelar</button>
+        </form>
+    </section>
+</body>
+</html>

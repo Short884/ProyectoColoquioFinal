@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar Cliente</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+
+<body>
+    <h1>Modificar Cliente</h1>
+    <form id="formModificarCliente">
+        <label for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" required>
+        <button type="button" onclick="buscarCliente()">Buscar Cliente</button>
+    </form>
+
+    <div id="formularioEdicion" style="display: none;">
+        <form action="../api/modificar_cliente.php" method="POST">
+            <input type="hidden" id="dniEdicion" name="dni">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required><br>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required><br>
+
+            <label for="iva">IVA:</label>
+            <select id="iva" name="iva">
+                <option value="inscripto">Inscripto</option>
+                <option value="monotributo">Monotributo</option>
+                <option value="exento">Exento</option>
+            </select>
+
+
+            <button type="submit">Modificar Cliente</button>
+        </form>
+    </div>
+    <div class="botones">
+        <button type="button" onclick="window.location.href='clientes.html'">Volver al menú de gestión de
+            clientes</button>
+        <button type="button" onclick="window.location.href='clientes.html'">Cancelar</button>
+    </div>
+
+
+    <script>
+        function buscarCliente() {
+            const dni = document.getElementById('dni').value;
+            fetch(`../api/buscar_cliente.php?dni=${dni}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById('dniEdicion').value = data.dni;
+                        document.getElementById('nombre').value = data.nombre;
+                        document.getElementById('apellido').value = data.apellido;
+                        document.getElementById('telefono').value = data.telefono;
+                        document.getElementById('iva').value = data.iva;
+                        document.getElementById('formularioEdicion').style.display = 'block';
+                    } else {
+                        alert('Cliente no encontrado.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+    <script>
+        const ivaCliente = "<?php echo htmlspecialchars($cliente['iva']); ?>";
+        document.getElementById("iva").value = ivaCliente;
+    </script>
+    
+</body>
+
+</html>
